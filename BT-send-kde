@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# turn on the Bluetooth Adapter
+bluetoothctl power on
+
+# create file
+file="/tmp/$(date -Iseconds).html"
+sudo touch $file
+# sudo echo $1 | sudo tee $file 
+
+sudo echo '<!DOCTYPE html><html><body><a href='$1'>'$1'</a></body></html>' > $file
+# get the devices
+# devices=$(bluetoothctl devices | cut -b 26-)
+readarray -t devices <<< $(bluetoothctl devices | cut -b 26-)
+
+#send the file (using bluedevil)
+bluedevil-sendfile  -f $file
